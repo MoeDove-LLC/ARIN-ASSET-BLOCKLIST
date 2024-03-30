@@ -1,13 +1,16 @@
 # ARIN AS-SET BLOCKLIST GENERATOR
 
-SYNC and flattern the AS-SET with ARIN RestFul API
+From local json file data UPDATE the AS-SET with ARIN RestFul API
+
+--------------------------
 
 Internet, Our home.  
 Prosperity. Liberty. Democracy. Our way of life.  
-But freedom doesn't come free.  
-Sweet Liberty.... Noooooooo  
+But freedom doesn't come free.   
 
 *one of your downstream just exported full-table to you and didn't use any filter.
+
+Sweet Liberty.... Noooooooo!  
 
 [INVASION]  
 
