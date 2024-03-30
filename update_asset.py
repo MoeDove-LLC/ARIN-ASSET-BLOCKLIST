@@ -9,7 +9,7 @@ import subprocess
 import copy
 import xmltodict
 
-as_dst = os.environ["AS_SET_DST"]
+as_set_dst = os.environ["AS_SET_DST"]
 apikey = os.environ["ARIN_APIKEY"]
 blockfile = os.environ["BLOCKLIST_FILE"]
 
