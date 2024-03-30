@@ -39,10 +39,9 @@ jobs:
       run: |
         python3 $GITHUB_WORKSPACE/update_asset.py
       env:
-        RIPE_MNT_PASSWD: ${{secrets.RIPE_MNT_PASSWD}}
-        AS_SET_SRC: ${{vars.AS_SET_SRC}}
+        ARIN_APIKEY: ${{secrets.ARIN_APIKEY}}
+        BLOCKLIST_FILE: ${{vars.BLOCKLIST_FILE}}
         AS_SET_DST: ${{vars.AS_SET_DST}}
-        MAX_DEPTH: ${{vars.MAX_DEPTH}}
       shell: bash
     - name: wrtie last runtime for debug
       run: |
