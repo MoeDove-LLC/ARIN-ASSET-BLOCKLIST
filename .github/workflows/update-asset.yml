@@ -1,0 +1,63 @@
+name: UPDATE-ARIN-ASSSET
+
+on:
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Update'
+        required: true
+        default: 'warning'
+        type: choice
+        options:
+        - info
+  schedule:
+    - cron:  '0 0 * * *'
+
+
+jobs:
+  asset-sync:
+    name: ASSET-SYNC
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GIT_SSH_COMMAND: "ssh -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa"
+    steps:
+    - name: Checkout Central Actions Repo
+      uses: actions/checkout@v4
+    - name: Cache
+      id: cache
+      uses: actions/cache@v4
+      with:
+        path: |
+          $GITHUB_WORKSPACE/cache
+        key: dst_cache 20240331
+    - name: Install depends
+      run: |
+        sudo pip3 install pyyaml xmltodict
+        sudo apt-get install -y bgpq4
+    - name: Update ASSET
+      run: |
+        python3 $GITHUB_WORKSPACE/update_asset.py
+      env:
+        RIPE_MNT_PASSWD: ${{secrets.RIPE_MNT_PASSWD}}
+        AS_SET_SRC: ${{vars.AS_SET_SRC}}
+        AS_SET_DST: ${{vars.AS_SET_DST}}
+        MAX_DEPTH: ${{vars.MAX_DEPTH}}
+      shell: bash
+    - name: wrtie last runtime for debug
+      run: |
+        echo $(date +%Y-%m-%d/%H:%M:%S) > $GITHUB_WORKSPACE/Runtime
+      shell: bash
+    - name: Commit
+      run: |
+        cd $GITHUB_WORKSPACE
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git add -A
+        git commit -m "record last runtime"
+    - name: Push changes
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: lastrun
+        force: true
